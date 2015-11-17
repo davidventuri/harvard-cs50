@@ -6,7 +6,7 @@
  *
  * David Venturi
  * 
- * Prints Mario's half-pyramid of hashes of height >= 1 and <= 23.
+ * Prints Mario's half-pyramid of hashes of user-inputted height >= 1 and <= 23.
  */
 
 int main(void)
