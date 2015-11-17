@@ -8,6 +8,7 @@
  * David Venturi
  *
  * Asks the user how much change is owed (in $) and prints the minimum number of coins with which said change can be made.
+ * Question: http://cdn.cs50.net/2015/x/psets/1/pset1/pset1.html#time_for_change
  */
 
 int main(void)
