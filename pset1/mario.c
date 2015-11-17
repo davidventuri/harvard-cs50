@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <cs50.h>
 
+/**
+ * mario.c
+ *
+ * David Venturi
+ * 
+ * Prints Mario's half-pyramid of hashes of height >= 1 and <= 23.
+ */
+
 int main(void)
 {
     int height, width, row_counter, col_counter;
