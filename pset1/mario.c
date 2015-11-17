@@ -7,6 +7,7 @@
  * David Venturi
  * 
  * Prints Mario's half-pyramid of hashes of user-inputted height >= 1 and <= 23.
+ * Question: http://cdn.cs50.net/2015/x/psets/1/pset1/pset1.html#itsa_mario
  */
 
 int main(void)
