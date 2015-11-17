@@ -42,4 +42,6 @@ int main(void)
     printf("%i is the minimum number of coins with which $%.2f worth of change can be made (quarter count = %i, 
             dime count = %i, nickel count = %i, penny count = %i).\n", coin_count, dollars, quarter_count, dime_count, 
             nickel_count, penny_count);
+
+    return 0;
 }
