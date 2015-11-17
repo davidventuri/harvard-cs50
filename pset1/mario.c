@@ -16,11 +16,11 @@ int main(void)
     // requests an integer from the user until the height requirement is satisfied 
     do
     {
-        printf("Please give me an integer between 1 and 23: "); 
+        printf("Please give me a non-negative integer no greater than 23: "); 
         height = GetInt();  
     }
-    while (height < 1 || height > 23);
-    printf("Thank you for the integer!\nHere is Mario's half-pyramid of height %i:\n", height);
+    while (height < 0 || height > 23);
+    printf("Thank you for the valid integer!\nHere is Mario's half-pyramid of height %i:\n", height);
     
     // the top row needs two hashes
     width = height + 1;
@@ -34,7 +34,8 @@ int main(void)
                 printf(" ");
             else
                 printf("#");
-        }  
+        }
         printf("\n");
-    } 
+    }
+    return 0;
 }
