@@ -28,7 +28,7 @@ int main(int argc, string argv[])
     }
     
     else {
-        // Declare key as an int. Can now assume that the user will only type integers at the prompt.
+        // Declare key as an int. Assume that the user will only type integers at the prompt.
         int key = atoi(argv[1]);
         
         printf("Please enter the phrase you would like to encrypt:\n");
