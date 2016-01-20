@@ -28,29 +28,29 @@ int main(int argc, string argv[])
     }
     
     else {
-        // Declare key as an int. Assume that the user will only type integers at the prompt.
+        // Declare key as an int. Can now assume that the user will only type integers at the prompt.
         int key = atoi(argv[1]);
         
         printf("Please enter the phrase you would like to encrypt:\n");
-        string phrase = GetString();
+        string message = GetString();
         
         int ASCII_A = 65;
         int ascii_a = 97;
         int len_alphabet = 26;
         
-        for (int i = 0, n = strlen(phrase); i < n; i++) {
+        for (int i = 0, n = strlen(message); i < n; i++) {
         
             // Add key to uppercase letters.
-            if (isupper(phrase[i]))
-                printf("%c", ((phrase[i] - ASCII_A + key) % len_alphabet) + ASCII_A);
+            if (isupper(message[i]))
+                printf("%c", ((message[i] - ASCII_A + key) % len_alphabet) + ASCII_A);
                 
             // Add key to lowercase letters.
-            else if (islower(phrase[i]))
-                printf("%c", ((phrase[i] - ascii_a + key) % len_alphabet) + ascii_a);
+            else if (islower(message[i]))
+                printf("%c", ((message[i] - ascii_a + key) % len_alphabet) + ascii_a);
             
             // Leave non-letters alone.
             else
-                printf("%c", phrase[i]);
+                printf("%c", message[i]);
         }
     }
     
