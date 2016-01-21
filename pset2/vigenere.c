@@ -10,6 +10,8 @@
  * Encrypts messages using Vigenere's cipher. Accepts a single command-line argument (a keyword composed of
  * alphabetical characters) as the encryption key. Retrieves the message to encrypt via user prompt.
  * 
+ * Usage: ./vigenere keyword
+ * 
  * David Venturi
  */
 
