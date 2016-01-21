@@ -7,7 +7,7 @@
 /**
  * vigenere.c
  *
- * Encrypts messages using Vigenere's cipher. Retrieves the message to encrypt via user prompt.
+ * Encrypts messages using the Vigenere cipher. Retrieves the message to encrypt via user prompt.
  * 
  * Usage: ./vigenere keyword
  * 
