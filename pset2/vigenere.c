@@ -21,18 +21,28 @@ int main(int argc, string argv[])
     // Check if the user did not enter a command line argument.
     if(argc == 1) {
         printf("You did not enter a command line argument for the Vigenere encryption keyword!\n");
-        printf("Please re-run the program and input a keyword entirely composed of alphabetical characters as a command line argument.");
+        printf("Please re-run the program and input a keyword entirely composed of alphabetical characters as a command line argument.\n");
+        return 1;
     }
     
     // Check if the user entered more than one command line argument.
     else if (argc > 2){
         printf("You entered too many command line arguments for the Vigenere encryption keyword!\n");
-        printf("Please re-run the program and input a keyword entirely composed of alphabetical characters as a command line argument.");
+        printf("Please re-run the program and input a keyword entirely composed of alphabetical characters as a command line argument.\n");
+        return 1;
     }
     
     else {
         // Declare keyword as a string. Assume that the user's keyword is entirely composed of alphabetical characters.
         string keyword = argv[1];
+        for (int i = 0, n = strlen(keyword); i < n; i++) {
+            if (!isalpha(keyword[i])) {
+                printf("Your keyword contains non-alphabetical characters!\n");
+                printf("Please re-run the program and input a keyword entirely composed of alphabetical characters as a command line argument.\n");
+                return 1;
+            }
+        }
+        
         int keyword_len = strlen(keyword);
         int keyword_index = 0;
         
@@ -41,7 +51,8 @@ int main(int argc, string argv[])
             keyword[i] = toupper(keyword[i]);
         }
         
-        printf("Please enter the phrase you would like to encrypt:\n");
+        // The printf below is hidden to satisfy the CS50 automatic grader.
+        // printf("Please enter the phrase you would like to encrypt:\n");
         string message = GetString();
         
         int ASCII_A = 65;
@@ -53,7 +64,7 @@ int main(int argc, string argv[])
             
             // Add key to uppercase letters and increment keyword index.
             if (isupper(message[i])) {
-                printf("%c", ((phrase[i] - ASCII_A + (keyword_map - ASCII_A)) % len_alphabet) + ASCII_A);
+                printf("%c", ((message[i] - ASCII_A + (keyword_map - ASCII_A)) % len_alphabet) + ASCII_A);
                 keyword_index++;
             }   
             // Add key to lowercase letters and increment keyword index.
