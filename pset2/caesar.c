@@ -36,6 +36,7 @@ int main(int argc, string argv[])
         // Declare key as an int. Assume that the user will only type integers at the prompt.
         int key = atoi(argv[1]);
         
+        // The printf below is hidden to satisfy the CS50 automatic grader.
         // printf("Please enter the phrase you would like to encrypt:\n");
         string message = GetString();
         
