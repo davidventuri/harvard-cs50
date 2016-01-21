@@ -7,10 +7,11 @@
 /**
  * vigenere.c
  *
- * Encrypts messages using Vigenere's cipher. Accepts a single command-line argument (a keyword composed of
- * alphabetical characters) as the encryption key. Retrieves the message to encrypt via user prompt.
+ * Encrypts messages using Vigenere's cipher. Retrieves the message to encrypt via user prompt.
  * 
  * Usage: ./vigenere keyword
+ * 
+ * where keyword is the cipher keyword that is entirely composed of alphabetical characters.
  * 
  * David Venturi
  */
