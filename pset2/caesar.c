@@ -7,8 +7,11 @@
 /**
  * caesar.c
  *
- * Encrypts messages using Caesar's cipher. Accepts a single command-line argument (a non-negative integer)
- * as the encryption key. Retrieves the message to encrypt via user prompt.
+ * Encrypts messages using the Caesar cipher. Retrieves the message to encrypt via user prompt.
+ * 
+ * Usage: ./caesar key
+ * 
+ * where key is a non-negative integer that is the cipher key.
  * 
  * David Venturi
  */
