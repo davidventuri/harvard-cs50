@@ -22,19 +22,21 @@ int main(int argc, string argv[])
     if(argc == 1) {
         printf("You did not enter a command line argument for the Caesar encryption key!\n");
         printf("Please re-run the program and input one non-negative integer as a command line argument.");
+        return 1;
     }
     
     // Check if the user entered more than one command line argument.
     else if (argc > 2){
         printf("You entered too many command line arguments for the Caesar encryption key!\n");
         printf("Please re-run the program and input one non-negative integer as a command line argument.");
+        return 1;
     }
     
     else {
         // Declare key as an int. Assume that the user will only type integers at the prompt.
         int key = atoi(argv[1]);
         
-        printf("Please enter the phrase you would like to encrypt:\n");
+        // printf("Please enter the phrase you would like to encrypt:\n");
         string message = GetString();
         
         int ASCII_A = 65;
