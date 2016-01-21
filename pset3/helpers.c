@@ -8,6 +8,7 @@
  */
        
 #include <cs50.h>
+#include <stdio.h>
 
 #include "helpers.h"
 
@@ -41,6 +42,20 @@ bool search(int value, int values[], int n)
  */
 void sort(int values[], int n)
 {
-    // TODO: implement an O(n^2) sorting algorithm
+    // Find the smallest element in an unsorted array of size n.
+    // Consider the first element the smallest.
+    for (int i = 0; i < n; i++)
+    {
+        int smallest_index = i;
+        for (int j = i+1; j < n; j++)
+        {
+            if (values[j] < values[smallest_index])
+                smallest_index = j;
+        }
+        // Swap the smallest element with the first element of the unsorted array.
+        int temp = values[i];
+        values[i] = values[smallest_index];
+        values[smallest_index] = temp;
+    }
     return;
 }
