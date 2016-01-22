@@ -38,6 +38,7 @@ void greet(void);
 void init(void);
 void draw(void);
 bool move(int tile);
+bool move_operation(int tile, int tile_row, int tile_col, int adj_tile_row, int adj_tile_col);
 bool won(void);
 
 int main(int argc, string argv[])
@@ -124,7 +125,7 @@ int main(int argc, string argv[])
         }
 
         // sleep thread for animation's sake
-        usleep(500000);
+        usleep(50000);
     }
     
     // close log
@@ -199,23 +200,6 @@ void draw(void)
 }
 
 /**
- * Check if adjacent tile is a zero and swap the current tile with it if so. 
- */
-bool adj_op(int tile, int tile_row, int tile_col, int adj_tile_row, int adj_tile_col)
-{
-    if (adj_tile_col >= 0 && adj_tile_col <= d-1 && adj_tile_row >= 0 && adj_tile_row <= d-1) {
-        int adj_tile = board[adj_tile_row][adj_tile_col];
-        if (adj_tile == 0) {
-            int temp = adj_tile;
-            board[adj_tile_row][adj_tile_col] = tile;
-            board[tile_row][tile_col] = temp;
-            return true;
-        }
-    }
-    return false;
-}
-
-/**
  * If tile borders empty space, moves tile and returns true, else
  * returns false. 
  */
@@ -242,24 +226,41 @@ bool move(int tile)
         
     int N_tile_col = tile_col;
     int N_tile_row = tile_row + 1;
-    if (adj_op(tile, tile_row, tile_col, N_tile_row, N_tile_col))
+    if (move_operation(tile, tile_row, tile_col, N_tile_row, N_tile_col))
         return true;
     
     int S_tile_col = tile_col;
     int S_tile_row = tile_row - 1;
-    if (adj_op(tile, tile_row, tile_col, S_tile_row, S_tile_col))
+    if (move_operation(tile, tile_row, tile_col, S_tile_row, S_tile_col))
         return true;
     
     int E_tile_col = tile_col + 1;
     int E_tile_row = tile_row;
-    if (adj_op(tile, tile_row, tile_col, E_tile_row, E_tile_col))
+    if (move_operation(tile, tile_row, tile_col, E_tile_row, E_tile_col))
         return true;
     
     int W_tile_col = tile_col - 1;
     int W_tile_row = tile_row;
-    if (adj_op(tile, tile_row, tile_col, W_tile_row, W_tile_col))
+    if (move_operation(tile, tile_row, tile_col, W_tile_row, W_tile_col))
         return true;
     
+    return false;
+}
+
+/**
+ * Checks if adjacent tile is a zero and swaps the current tile with it if so. 
+ */
+bool move_operation(int tile, int tile_row, int tile_col, int adj_tile_row, int adj_tile_col)
+{
+    if (adj_tile_row >= 0 && adj_tile_row <= d-1 && adj_tile_col >= 0 && adj_tile_col <= d-1) {
+        int adj_tile = board[adj_tile_row][adj_tile_col];
+        if (adj_tile == 0) {
+            int temp = adj_tile;
+            board[adj_tile_row][adj_tile_col] = tile;
+            board[tile_row][tile_col] = temp;
+            return true;
+        }
+    }
     return false;
 }
 
@@ -269,6 +270,24 @@ bool move(int tile)
  */
 bool won(void)
 {
-    // TODO
-    return false;
+    int winning_number = 1;
+    int last_row = d-1;
+    int last_col = d-1;
+    
+    // Iterate through each tile checking to see if winning configuration exists.
+    for (int i = 0; i < d; i++) {
+        for (int j = 0; j < d; j++) {
+            if (board[i][j] != board[last_row][last_col]) {
+                if (board[i][j] == winning_number) {
+                    winning_number++;
+                }
+                else
+                    return false;
+            }
+            // If the last tile is reached, the board must be in winning configuration.
+            else
+                return true;
+        }
+    }
+    return true;
 }
