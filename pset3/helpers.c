@@ -47,8 +47,10 @@ bool binary_search(int value, int values[], int n)
     
     while (start_index <= end_index) {
         int mid_index = (start_index + end_index) / 2;
-        if (value == values[mid_index])
+        if (value == values[mid_index]) {
+            printf("FOUND IT!");
             return true;
+        }
         else if (value < values[mid_index]) {
             end_index = mid_index - 1;
         }
@@ -56,6 +58,7 @@ bool binary_search(int value, int values[], int n)
             start_index = mid_index + 1;
         }
     }
+
     return false;
 }
 
