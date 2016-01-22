@@ -63,7 +63,7 @@ bool binary_search(int value, int values[], int n)
 }
 
 /**
- * Sorts array of n values.
+ * Sorts array of n values using selection sort.
  */
 void sort(int values[], int n)
 {
