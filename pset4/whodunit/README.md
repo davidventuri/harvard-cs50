@@ -1,4 +1,4 @@
-#whodunit
+#[whodunit](http://cdn.cs50.net/2016/x/psets/4/pset4/pset4.html#whodunit)
 
 Welcome to Tudor Mansion. Your host, Mr. John Boddy, has met an untimely end—he’s the victim of foul play. To win this game, you must determine whodunit.
 
