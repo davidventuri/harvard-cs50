@@ -1,10 +1,12 @@
 /**
- * copy.c
+ * resize.c
  *
  * Computer Science 50
  * Problem Set 4
  *
- * Copies a BMP piece by piece, just because.
+ * Resizes a BMP by a factor of n, where n is a postive integer less than or 
+ * equal to 100. Uses the re-copy method (goes back to the start of the row
+ * and repeats the horizontal resizing n times to resize vertically).
  */
        
 #include <stdio.h>
@@ -22,7 +24,13 @@ int main(int argc, char* argv[])
     }
 
     // factor for resizing the image
-    int n = argv[1];
+    int n = atoi(argv[1]);
+    
+    if (n < 1 || n > 100)
+    {
+           printf("BMP resizing factor must be a postive integer less than or equal to 100.");
+           return 1;
+    }
     
     // remember filenames
     char* infile = argv[2];
@@ -63,20 +71,19 @@ int main(int argc, char* argv[])
         return 4;
     }
     
-    // change biWidth, biHeight
+    // old biWidth (px), biHeight (px), padding (bytes)
+    int old_biWidth = bi.biWidth;
+    int old_biHeight = bi.biHeight;
+    int old_padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+    
+    // new biWidth (px), biHeight (px), padding (bytes)
     bi.biWidth = bi.biWidth * n;
     bi.biHeight = bi.biHeight * n;
+    int new_padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
     
-    // determine padding (in bytes) for scanlines
-    int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
-    
-    // change biSizeImage (bytes)
-    bi.biSizeImage = ((bi.biWidth * sizeof(RGBTRIPLE)) + padding) * abs(bi.biHeight);
-    
-    // change bfSize (bytes)
-    bf.bfSize = bi.biSizeImage + 54;
-    
-    // keep track of both...pointers
+    // update biSizeImage, bfSize for new image (bytes)
+    bi.biSizeImage = ((bi.biWidth * sizeof(RGBTRIPLE)) + new_padding) * abs(bi.biHeight);
+    bf.bfSize = bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
 
     // write outfile's BITMAPFILEHEADER
     fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
@@ -85,28 +92,42 @@ int main(int argc, char* argv[])
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
     // iterate over infile's scanlines
-    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    for (int i = 0, biHeight = abs(old_biHeight); i < biHeight; i++)
     {
-        // iterate over pixels in scanline
-        for (int j = 0; j < bi.biWidth; j++)
+        for (int row_tracker = 0; row_tracker < n; row_tracker ++)
         {
-            // temporary storage
-            RGBTRIPLE triple;
-
-            // read RGB triple from infile
-            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
-
-            // write RGB triple to outfile
-            fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
-        }
-
-        // skip over padding, if any
-        fseek(inptr, padding, SEEK_CUR);
-
-        // then add it back (to demonstrate how)
-        for (int k = 0; k < padding; k++)
-        {
-            fputc(0x00, outptr);
+            // iterate over pixels in scanline
+            for (int j = 0; j < old_biWidth; j++)
+            {
+                for (int col_tracker = 0; col_tracker < n; col_tracker++)
+                {
+                    // temporary storage
+                    RGBTRIPLE triple;
+        
+                    // read RGB triple from infile
+                    fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
+        
+                    // write RGB triple to outfile
+                    fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+                    
+                    // move file pointer back one pixel if not at last pixel
+                    if (col_tracker != (n-1))
+                        fseek(inptr, -sizeof(RGBTRIPLE), SEEK_CUR);
+                }
+            }
+    
+            // skip over padding, if any
+            fseek(inptr, old_padding, SEEK_CUR);
+    
+            // then add it back (to demonstrate how)
+            for (int l = 0; l < new_padding; l++)
+            {
+                fputc(0x00, outptr);
+            }
+            
+            // move file pointer back to the beginning of the row if not at last row
+            if (row_tracker != (n-1))
+                fseek(inptr, (-sizeof(RGBTRIPLE) * old_biWidth) - old_padding , SEEK_CUR);
         }
     }
 
