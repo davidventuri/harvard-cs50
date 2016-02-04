@@ -10,55 +10,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 int main(int argc, char* argv[])
 {
     // open memory card file
     FILE* inptr = fopen("card.raw", "r");
-    FILE* outptr = NULL;
     if (inptr == NULL)
     {
         printf("Could not open %s.\n", "card.raw");
         return 1;
     }
     
-    // create 512 byte block buffer
+    FILE* outptr = NULL;
+    
+    // create 512 byte buffer array
     typedef uint8_t  BYTE;
     BYTE buffer[512];
+    
+    // create array for first four bytes of the buffer
     BYTE firstfour[4];
     
-    //BYTE jpgsig[4] = {0xff, 0xd8, 0xff, 0xe};
+    // the first 3.5 bytes of a jpg file (i.e. jpg signature)
+    // the last four bits are hardcoded as zeros here
+    BYTE jpgsig[4] = {0xff, 0xd8, 0xff, 0xe0};
     
-    int img_number = 0;
-    char title[8];
+    // keep track of jpg numbers for jpg filenames
+    int jpgnumber = 0;
     
-    // read buffer block from card.raw
+    // read a buffer from card.raw until EOF
     while (fread(&buffer, sizeof(buffer), 1, inptr) > 0)
     {
-        // Add first four bytes into the check buffer
+        // load first three bytes of the buffer into firstfour
 		for(int i = 0; i < 4; i++)
 		{
 			firstfour[i] = buffer[i];
 		}
+		
+		// load first four bits of the fourth byte of the buffer into firstfour
+		// and hardcode the last 4 bits as zeros
+		firstfour[3] =((firstfour[3] & 0xf0) >> 4) << 4;
 				
-				
-        // check for jpg signature
-        if (firstfour[0] == 0xff && firstfour[1] == 0xd8 && firstfour[2] == 0xff && ((firstfour[3] & 0xf0) >> 4) == 0xe)
+        // if jpg signature is found
+        if (memcmp(jpgsig, firstfour, sizeof(jpgsig)) == 0)
         {
+            // create jpg filename
+            char jpgfilename[8];
+            
             // a jpg is not open yet
             if (outptr == NULL)
             {
-                sprintf(title, "%03d.jpg", img_number);
-                outptr = fopen(title, "a");
+                sprintf(jpgfilename, "%03d.jpg", jpgnumber);
+                outptr = fopen(jpgfilename, "a");
                 fwrite(&buffer, sizeof(buffer), 1, outptr);
             }
             // a jpg is already open
             else
             {
                 fclose(outptr);
-                img_number++;
-                sprintf(title, "%03d.jpg", img_number);
-                outptr = fopen(title, "a");
+                jpgnumber++;
+                sprintf(jpgfilename, "%03d.jpg", jpgnumber);
+                outptr = fopen(jpgfilename, "a");
                 fwrite(&buffer, sizeof(buffer), 1, outptr);
             }
         }
@@ -71,6 +83,9 @@ int main(int argc, char* argv[])
             }
         }
     }
+    
+    // close files and exit cleanly
     fclose(inptr);
     fclose(outptr);
+    return 0;
 }
