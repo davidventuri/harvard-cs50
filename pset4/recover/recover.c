@@ -31,32 +31,29 @@ int main(int argc, char* argv[])
     // create array for first four bytes of the buffer
     BYTE firstfour[4];
     
-    // the first 3.5 bytes of a jpg file (i.e. jpg signature)
-    // the last four bits are hardcoded as zeros here
+    // the first 4 bytes of a jpg file (i.e. jpg signature)
+    // the last four bits can range from 0-f and are hardcoded as zeros here
     BYTE jpgsig[4] = {0xff, 0xd8, 0xff, 0xe0};
     
     // keep track of jpg numbers for jpg filenames
     int jpgnumber = 0;
+    char jpgfilename[8];
     
     // read a buffer from card.raw until EOF
     while (fread(&buffer, sizeof(buffer), 1, inptr) > 0)
     {
         // load first three bytes of the buffer into firstfour
-		for(int i = 0; i < 4; i++)
-		{
-			firstfour[i] = buffer[i];
-		}
-		
-		// load first four bits of the fourth byte of the buffer into firstfour
-		// and hardcode the last 4 bits as zeros
-		firstfour[3] =((firstfour[3] & 0xf0) >> 4) << 4;
-				
+	for(int i = 0; i < 4; i++)
+	{
+	    firstfour[i] = buffer[i];
+	}
+	
+	// hardcode zeros into last four bits of fourth byte in firstfour
+	firstfour[3] =(firstfour[3] >> 4) << 4;
+	
         // if jpg signature is found
-        if (memcmp(jpgsig, firstfour, sizeof(jpgsig)) == 0)
+        if (memcmp(firstfour, jpgsig, sizeof(jpgsig)) == 0)
         {
-            // create jpg filename
-            char jpgfilename[8];
-            
             // a jpg is not open yet
             if (outptr == NULL)
             {
@@ -64,6 +61,7 @@ int main(int argc, char* argv[])
                 outptr = fopen(jpgfilename, "a");
                 fwrite(&buffer, sizeof(buffer), 1, outptr);
             }
+            
             // a jpg is already open
             else
             {
@@ -74,9 +72,10 @@ int main(int argc, char* argv[])
                 fwrite(&buffer, sizeof(buffer), 1, outptr);
             }
         }
+        
         else
         {
-            // jpg is already open
+            // a jpg is already open
             if (outptr != NULL)
             {
                 fwrite(&buffer, sizeof(buffer), 1, outptr);
