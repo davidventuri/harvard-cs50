@@ -43,13 +43,13 @@ int main(int argc, char* argv[])
     while (fread(&buffer, sizeof(buffer), 1, inptr) > 0)
     {
         // load first three bytes of the buffer into firstfour
-	for(int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 	    firstfour[i] = buffer[i];
 	}
 	
 	// hardcode zeros into last four bits of fourth byte in firstfour
-	firstfour[3] =(firstfour[3] >> 4) << 4;
+	firstfour[3] = (firstfour[3] >> 4) << 4;
 	
         // if jpg signature is found
         if (memcmp(firstfour, jpgsig, sizeof(jpgsig)) == 0)
