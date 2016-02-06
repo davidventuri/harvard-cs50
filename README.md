@@ -8,3 +8,4 @@ To complete the following psets, I studied all of the CS50 lectures, walkthrough
 - [Problem Set 2: Crypto](http://cdn.cs50.net/2016/x/psets/2/pset2/pset2.html)
 - [Problem Set 3: Game of Fifteen](http://cdn.cs50.net/2016/x/psets/3/pset3/pset3.html)
 - [Problem Set 4: Forensics](http://cdn.cs50.net/2016/x/psets/4/pset4/pset4.html)
+- [Problem Set 5: Mispellings](http://cdn.cs50.net/2016/x/psets/5/pset5/pset5.html)
