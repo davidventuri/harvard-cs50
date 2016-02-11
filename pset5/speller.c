@@ -19,7 +19,8 @@
 // default dictionary
 #define DICTIONARY "dictionaries/large"
 
-// prototype
+// function prototype
+// DV note: rusage* is a pointer to b, a
 double calculate(const struct rusage* b, const struct rusage* a);
 
 int main(int argc, char* argv[])
@@ -32,15 +33,19 @@ int main(int argc, char* argv[])
     }
 
     // structs for timing data
+    // DV note: before and after are instances of type struct rusage
     struct rusage before, after;
 
     // benchmarks
     double time_load = 0.0, time_check = 0.0, time_size = 0.0, time_unload = 0.0;
 
     // determine dictionary to use
+    // DV note: conditional operator
     char* dictionary = (argc == 3) ? argv[1] : DICTIONARY;
 
     // load dictionary
+    // DV note: RUSAGE_SELF tells getrusage to fill the instance with info about
+    // resources used by the current process
     getrusage(RUSAGE_SELF, &before);
     bool loaded = load(dictionary);
     getrusage(RUSAGE_SELF, &after);
@@ -182,6 +187,8 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+// DV note: info loaded into before, process performed, info loaded into after
+// ...calculate is used for multiple different processes
 /**
  * Returns number of seconds between b and a.
  */
