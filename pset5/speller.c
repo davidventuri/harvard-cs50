@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
         }
 
         // we must have found a whole word
+        // DV note: because we hit a space or punctuation which signifies EOW
         else if (index > 0)
         {
             // terminate current word
