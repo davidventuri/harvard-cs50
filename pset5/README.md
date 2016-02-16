@@ -15,6 +15,6 @@ Within the default dictionary, mind you, are 143,091 words, all of which must be
 So that you can test your implementation of speller, we’ve also provided you with a whole bunch of texts, among them the script from Austin Powers: International Man of Mystery, a sound bite from Ralph Wiggum, three million bytes from Tolstoy, some excerpts from Machiavelli and Shakespeare, the entirety of the King James V Bible, and more.
 
 ### Results
-Left = my code, right = staff solution (time in seconds):
+Left = my code, right = staff solution (time in seconds): 💪
 
 ![My code vs. staff solution](http://i.imgur.com/tdQTo5a.png)
