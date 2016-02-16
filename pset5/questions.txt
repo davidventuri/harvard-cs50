@@ -59,9 +59,9 @@ POST-SOLUTION QUESTIONS
 7. What data structure(s) did you use to implement your spell-checker? Be sure 
    not to leave your answer at just "hash table," "trie," or the like. Expound 
    on what’s inside each of your "nodes."
-        I used a hash table comprised of node structs. The node structs contain
-        two members - 1) a char array called word and 2) a pointer to a new node
-        called next.
+        I used a hash table. Each bucket in the has table had a linked list of
+        node structs. Each node struct contains two members - 1) a char array 
+        called word and 2) a pointer to a new node called next.
 8. How slow was your code the first time you got it working correctly?
         My code wasn't slow at all! The first time I got it fully working was
         the total time was hovering between 0.05 and 0.08 seconds (oftentimes
