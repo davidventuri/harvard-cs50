@@ -108,6 +108,7 @@ bool load(const char* dictionary)
         node* new_node = malloc(sizeof(node));
         if (new_node == NULL)
         {
+            printf("Could not malloc a new node.\n");
             return false;
         }
         
@@ -124,7 +125,7 @@ bool load(const char* dictionary)
 
         word_count++;
         
-        // DV note: hashtable[h] is a pointer to a key-value pair
+        // hashtable[h] is a pointer to a key-value pair
         int h = hash_it(new_node->word);
         node* head = hashtable[h];
         
