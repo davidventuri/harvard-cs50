@@ -16,4 +16,5 @@ So that you can test your implementation of speller, we’ve also provided you w
 
 ### Results
 Left = my code, right = staff solution (time in seconds):
+
 ![My code vs. staff solution](http://i.imgur.com/tdQTo5a.png)
