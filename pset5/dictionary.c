@@ -45,11 +45,12 @@ int hash_it(char* needs_hashing)
  */
 bool check(const char* word)
 {
-    // remove const to permit non-read actions on word
+    // create char array to store copy of word
+    // word is a const char* and non-read actions cannot be performed on it
     int len = strlen(word);
     char word_copy[len + 1];
     
-    // convert word to lowercase
+    // convert word to lowercase and store it in word_copy
     for (int i = 0; i < len; i++)
     {
        word_copy[i] = tolower(word[i]);
@@ -58,12 +59,13 @@ bool check(const char* word)
     // add null terminator to end of char array
     word_copy[len] = '\0';
     
-    // get hash value
+    // get hash value (a.k.a. bucket)
     int h = hash_it(word_copy);
     
     // assign cursor node to the first node of the bucket
     node* cursor = hashtable[h];
     
+    // check until the end of the linked list
     while (cursor != NULL)
     {
         if (strcmp(cursor->word, word_copy) == 0)
@@ -90,7 +92,6 @@ bool load(const char* dictionary)
     for (int i = 0; i < HASHTABLE_SIZE; i++)
     {
         hashtable[i] = NULL;
-        
     }
     
     // open dictionary
@@ -109,6 +110,8 @@ bool load(const char* dictionary)
         {
             return false;
         }
+        
+        // read a word from the dictionary and store it in new_node->word
         fscanf(fp, "%s", new_node->word);
         new_node->next = NULL;
         
@@ -131,13 +134,14 @@ bool load(const char* dictionary)
             hashtable[h] = new_node;
         }
         // if bucket is not empty, attach node to front of list
+        // design choice: unsorted linked list to minimize load time rather
+        // than sorted linked list to minimize check time
         else
         {
-            new_node->next = hashtable[h]; // remember head is a pointer!
+            new_node->next = hashtable[h];
             hashtable[h] = new_node;
         }
     }
-    
     // close dictionary
     fclose(fp);
     loaded = true;
