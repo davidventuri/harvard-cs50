@@ -21,6 +21,7 @@
 // (e.g., pneumonoultramicroscopicsilicovolcanoconiosis)
 #define LENGTH 45
 
+// number of buckets in the hash table
 #define HASHTABLE_SIZE 65536
 
 /**
