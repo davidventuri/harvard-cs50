@@ -1,4 +1,4 @@
-# [Problem Set 5: Mispellings](http://cdn.cs50.net/2016/x/psets/5/pset5/pset5.html)
+# [Problem Set 6: Web Server](http://cdn.cs50.net/2016/x/psets/6/pset6/pset6.html)
 
 ### Objectives
 - Become familiar with HTTP.
