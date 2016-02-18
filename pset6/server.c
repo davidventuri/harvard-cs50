@@ -618,7 +618,39 @@ bool load(FILE* file, BYTE** content, size_t* length)
  */
 const char* lookup(const char* path)
 {
-    // TODO
+    // isolate file extension and store it in ext
+    // DV note: strrchr includes null terminator
+    char* extension;
+    extension = strrchr(path, '.');
+    
+    if (extension != NULL)
+    {
+        // return MIME type based on case-insentive string comparison
+        // DV note: string literals implicitly contain null terminator
+        if (strcasecmp(extension, ".css") == 0)
+            return "text/css";
+        
+        if (strcasecmp(extension, ".html") == 0)
+            return "text/html";
+            
+        if (strcasecmp(extension, ".gif") == 0)
+            return "image/gif";
+            
+        if (strcasecmp(extension, ".ico") == 0)
+            return "image/x-icon";
+        
+        if (strcasecmp(extension, ".jpg") == 0)
+            return "image/jpeg";
+        
+        if (strcasecmp(extension, ".js") == 0)
+            return "text/javascript";
+            
+        if (strcasecmp(extension, ".php") == 0)
+            return "text/x-php";
+            
+        if (strcasecmp(extension, ".png") == 0)
+            return "image/png";
+    }
     return NULL;
 }
 
@@ -630,6 +662,14 @@ const char* lookup(const char* path)
 bool parse(const char* line, char* abs_path, char* query)
 {
     // TODO
+    
+    // iterate over line (char by char or string by string) to make sure it
+    // meets the formal def of the first request line as per the spec
+    
+    // need to load into abs_path that substring that represents /hello.html
+    
+    // iterate over query string to store query string itself
+    
     error(501);
     return false;
 }
