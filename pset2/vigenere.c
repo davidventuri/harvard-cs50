@@ -33,7 +33,7 @@ int main(int argc, string argv[])
     }
     
     else {
-        // Declare keyword as a string. Assume that the user's keyword is entirely composed of alphabetical characters.
+        // Reject keywords with non-alphabetical characters.
         string keyword = argv[1];
         for (int i = 0, n = strlen(keyword); i < n; i++) {
             if (!isalpha(keyword[i])) {
