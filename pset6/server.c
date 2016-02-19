@@ -666,36 +666,66 @@ const char* lookup(const char* path)
  * to be at least of length LimitRequestLine + 1.
  */
 bool parse(const char* line, char* abs_path, char* query)
+{
+    // copy line into line_copy to remove const
+    int len_line = strlen(line);
+    char line_copy[len_line + 1]; // include space for null terminator
+    strcpy(line_copy, line);
+    
+    const char* method = strtok(line_copy, " "); // has null terminator
+    // if strtok generates < 1 string, 0 spaces must exist
+    if (method == NULL)
+    {
+        error(400);
+        return false;
+    }
 
+    const char* request_target = strtok(NULL, " "); // has null terminator
+    // if strtok generates < 2 strings, < 1 space must exist
+    if (request_target == NULL)
+    {
+        error(400);
+        return false;
+    }
+
+    const char* http_version = strtok(NULL, " "); // has null terminator
+    // if strtok generates < 3 strings, < 2 spaces must exist
+    if (http_version == NULL)
+    {
+        error(400);
+        return false;
+    }
+
+    const char* fourth_string = strtok(NULL, " "); // has null terminator
+    // if strtok generates > 3 strings, > 2 spaces must exist
+    if (fourth_string != NULL)
+    {
+        error(400);
+        return false;
+    }
+    
+    // if we get to here, we are guaranteed to have 2 spaces
+    // by checking that GET exists properly, we guarantee there are no spaces in it
+    // by checking that http version exists properly, we guarantee there are no spaces in it
+    // this indirectly guarantees word in between the two spaces (request-target) has no spaces
+    
     // ensure method is GET
     const char correct_method[4] = "GET"; // has null terminator
-    const char* method = strtok(line, " "); // has null terminator
-    const char* request_target = strtok(NULL, " ");
-    const char* http_version = strtok(NULL, " ");
-    
-    // confirm there are only two spaces somehow
-    
-    if (strcmp(method, correct_method) != 0 || line[3] != ' ') // do i need single quotes
+    if (strcmp(method, correct_method) != 0) // don't need to check single spaces anymore
     {
         error(405);
         return false;
     }
-        
-    // ensure method does not contain spaces
-    // don't need this because abcGET is supposed to return 405 according
-    // to gradebook
-        //error(400);
-        //return false;
       
     // ensure single space exists between method and request-target
-    if (line[4] == ' ')
+    if (line_copy[4] == ' ')
     {
         error(400);
         return false;
     }
         
     // ensure "/" is the first character in request-target
-    if (line[5] != '/')
+    if (line_copy[4] != '/')
     {
         error(501);
         return false;
@@ -709,51 +739,70 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
     
-    // IF THERE IS A SPACE IN THE REQUEST TARGET, http_version variable becomes the second half
-    // wrong error code is spit out
-    
-    // ensure HTTP version is 1.1
-    const char correct_http_version[9] = "HTTP/1.1"; // has null terminator
-    
-    // ensure no spaces in request-target
-    if (http_version[0] != 'H')
+    // ensure single space exists between request-target and HTTP-version
+    // GET /home/hello.html HTTP/1.1\r\n0
+    // 34 - 13 = 21st element, therefore index 20 is the first space
+    // therefore index 21 is the char following the space
+    int len_http_version = strlen(http_version);
+    if (line_copy[len_line - len_http_version] == ' ')
     {
         error(400);
         return false;
     }
     
+    // ensure HTTP version is 1.1
+    // remember http_version should contain \r\n
+    const char correct_http_version[9] = "HTTP/1.1"; // has null terminator
     if (strncmp(http_version, correct_http_version, 8) != 0)
     {
         error(505);
         return false;
     }
     
-    // ensure single space exists between request-target and HTTP-version
-    int len_http_version = strlen(http_version);
-    int len_line = strlen(line);
-    
-    // GET /home/hello.html HTTP/1.1\r\n0
-    // 34 - 13 = 21st element, therefore index 20 is the first space
-    // therefore index 21 is the char following the space
-    
-    if (line[len_line - len_http_version] == ' ')
-    {
-        error(400);
-        return false;
-    }
+    // ensure no spaces in request-target
+    //if (http_version[0] != 'H')
+    //{
+    //    error(400);
+    //    return false;
+    //}
         
     // ensure HTTP version does not contain spaces
         // error(400);
         // return false;
     
     // ensure request-line ends with CRLF (i.e. ""\r\n")
-    crlf = "\\r\\n"; // has null terminator
-    if (strstr(http_version, crlf) == NULL)
+    const char* crlf = "\\r\\n"; // has null terminator
+    if (strstr(http_version, crlf) != crlf)
     {
         error(400);
         return false;
     }
     
+    // copy request_target into request_target_copy to remove const
+    int len_request_target = strlen(request_target);
+    char request_target_copy[len_request_target + 1]; // include space for null terminator
+    strcpy(request_target_copy, request_target);
+    
+    
+    // store absolute-path and [ "?" query ]
+    // if request target doesn't have a ?
+    if (strchr(request_target, '?') == NULL)
+    {
+        abs_path = request_target_copy;
+        query = "";
+    }
+    // if request target has a ? 
+    else
+    {
+        abs_path = strtok(request_target_copy, "?");
+        query = strtok(NULL, "?");
+        if (query == NULL)
+        {
+            query = "";
+        }
+    }
+    
+    return true;
 }
 
 /**
@@ -809,8 +858,8 @@ bool request(char** message, size_t* length)
     }
 
     // initialize message and its length
-    *message = NULL; // dereference the double pointer
-    *length = 0; // dereference the pointer
+    *message = NULL;
+    *length = 0;
 
     // read message 
     while (*length < LimitRequestLine + LimitRequestFields * LimitRequestFieldSize + 4)
