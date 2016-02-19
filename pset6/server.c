@@ -618,6 +618,12 @@ bool load(FILE* file, BYTE** content, size_t* length)
  */
 const char* lookup(const char* path)
 {
+    // path points to series of chars, then null terminator
+    // do not copy null terminator
+    // int len = strlen(path);
+    // char path_copy[len];
+    // strncpy(path_copy, path, len);
+    
     // isolate file extension and store it in ext
     // DV note: strrchr includes null terminator
     char* extension;
@@ -660,18 +666,94 @@ const char* lookup(const char* path)
  * to be at least of length LimitRequestLine + 1.
  */
 bool parse(const char* line, char* abs_path, char* query)
-{
-    // TODO
+
+    // ensure method is GET
+    const char correct_method[4] = "GET"; // has null terminator
+    const char* method = strtok(line, " "); // has null terminator
+    const char* request_target = strtok(NULL, " ");
+    const char* http_version = strtok(NULL, " ");
     
-    // iterate over line (char by char or string by string) to make sure it
-    // meets the formal def of the first request line as per the spec
+    // confirm there are only two spaces somehow
     
-    // need to load into abs_path that substring that represents /hello.html
+    if (strcmp(method, correct_method) != 0 || line[3] != ' ') // do i need single quotes
+    {
+        error(405);
+        return false;
+    }
+        
+    // ensure method does not contain spaces
+    // don't need this because abcGET is supposed to return 405 according
+    // to gradebook
+        //error(400);
+        //return false;
+      
+    // ensure single space exists between method and request-target
+    if (line[4] == ' ')
+    {
+        error(400);
+        return false;
+    }
+        
+    // ensure "/" is the first character in request-target
+    if (line[5] != '/')
+    {
+        error(501);
+        return false;
+    }
+        
+    // ensure request-target does not contain "
+    // don't need to check for spaces because logic flow guarantees no spaces
+    if (strchr(request_target, '"') != NULL) // backslash not required for single quotes
+    {
+        error(400);
+        return false;
+    }
     
-    // iterate over query string to store query string itself
+    // IF THERE IS A SPACE IN THE REQUEST TARGET, http_version variable becomes the second half
+    // wrong error code is spit out
     
-    error(501);
-    return false;
+    // ensure HTTP version is 1.1
+    const char correct_http_version[9] = "HTTP/1.1"; // has null terminator
+    
+    // ensure no spaces in request-target
+    if (http_version[0] != 'H')
+    {
+        error(400);
+        return false;
+    }
+    
+    if (strncmp(http_version, correct_http_version, 8) != 0)
+    {
+        error(505);
+        return false;
+    }
+    
+    // ensure single space exists between request-target and HTTP-version
+    int len_http_version = strlen(http_version);
+    int len_line = strlen(line);
+    
+    // GET /home/hello.html HTTP/1.1\r\n0
+    // 34 - 13 = 21st element, therefore index 20 is the first space
+    // therefore index 21 is the char following the space
+    
+    if (line[len_line - len_http_version] == ' ')
+    {
+        error(400);
+        return false;
+    }
+        
+    // ensure HTTP version does not contain spaces
+        // error(400);
+        // return false;
+    
+    // ensure request-line ends with CRLF (i.e. ""\r\n")
+    crlf = "\\r\\n"; // has null terminator
+    if (strstr(http_version, crlf) == NULL)
+    {
+        error(400);
+        return false;
+    }
+    
 }
 
 /**
