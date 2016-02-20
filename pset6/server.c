@@ -444,7 +444,19 @@ char* htmlspecialchars(const char* s)
  */
 char* indexes(const char* path)
 {
-    // TODO
+    // Complete the implementation of indexes in such a way that the function, 
+    // given a /path/to/a/directory, returns /path/to/a/directory/index.php if 
+    // index.php actually exists therein, or /path/to/a/directory/index.html if
+    // index.html actually exists therein, or NULL. In the first of those cases,
+    // this function should dynamically allocate memory on the heap for the 
+    // returned string.
+
+
+    
+    // check if index.php exists inside of path
+    
+    // check if index.html exists inside of path
+    
     return NULL;
 }
 
@@ -609,8 +621,50 @@ void list(const char* path)
  */
 bool load(FILE* file, BYTE** content, size_t* length)
 {
-    // TODO
-    return false;
+    // store address in *content (dereference the pointer to a pointer)
+    // iterate through file until we reach end of file, adding to byte_count
+    
+    // initialize content and its length
+    *content = NULL;
+    *length = 0;
+    
+    // initialize buffer
+    BYTE buffer[BYTES];
+
+    // read from file and attempt to store 512 bytes in buffer
+    while (fread(buffer, BYTES, 1, file) != 0)
+    {
+        // append bytes to content 
+        *content = realloc(*content, *length * BYTES + BYTES + 1);
+        if (*content == NULL)
+        {
+            printf("Memory allocation error.\n");
+            *length = 0;
+            return false;
+        }
+        memcpy(*content + *length * BYTES, buffer, BYTES);
+        *length += 1;
+
+        // null-terminate message thus far
+        *(*content + *length) = '\0';
+    }
+    
+    // if EOF reached
+    if (feof(file))
+    {
+        return true;
+    }
+    // if error occurred
+    else
+    {
+        if (*content != NULL)
+        {
+            free(*content);
+            *content = NULL;
+        }
+        *length = 0;
+        return false;
+    }
 }
 
 /**
