@@ -450,12 +450,51 @@ char* indexes(const char* path)
     // index.html actually exists therein, or NULL. In the first of those cases,
     // this function should dynamically allocate memory on the heap for the 
     // returned string.
-
-
     
-    // check if index.php exists inside of path
+    int len_path = strlen(path);
+    int len_index_php = 9 + 1; // include null terminator
+    char* index_php_path = malloc(len_path + len_index_php);
     
-    // check if index.html exists inside of path
+    if (index_php_path == NULL)
+    {
+        printf("Memory allocation error.\n");
+        return NULL;
+    }
+    
+    strcpy(index_php_path, path);
+    strcat(index_php_path, "index.php");
+    
+    // check if index.php exists in path
+    if (access(index_php_path, F_OK) != -1)
+    {
+       return index_php_path;
+    }
+    else
+    {
+        free(index_php_path);
+    }
+    
+    int len_index_html = 10 + 1; // include null terminator
+    char* index_html_path = malloc(len_path + len_index_html);
+    
+    if (index_html_path == NULL)
+    {
+        printf("Memory allocation error.\n");
+        return NULL;
+    }
+    
+    strcpy(index_html_path, path);
+    strcat(index_html_path, "index.html");
+    
+    // check if index.html exists in path
+    if (access(index_html_path, F_OK) != -1)
+    {
+       return index_html_path;
+    }
+    else
+    {
+        free(index_html_path);
+    }
     
     return NULL;
 }
@@ -680,6 +719,7 @@ const char* lookup(const char* path)
     
     // isolate file extension and store it in ext
     // DV note: strrchr includes null terminator
+    
     char* extension;
     extension = strrchr(path, '.');
     
@@ -730,6 +770,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 1 string, 0 spaces must exist
     if (method == NULL)
     {
+        printf("1\n");
         error(400);
         return false;
     }
@@ -738,6 +779,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 2 strings, < 1 space must exist
     if (request_target == NULL)
     {
+        printf("2\n");
         error(400);
         return false;
     }
@@ -746,6 +788,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 3 strings, < 2 spaces must exist
     if (http_version == NULL)
     {
+        printf("3\n");
         error(400);
         return false;
     }
@@ -754,6 +797,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates > 3 strings, > 2 spaces must exist
     if (fourth_string != NULL)
     {
+        printf("4\n");
         error(400);
         return false;
     }
@@ -774,6 +818,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // ensure single space exists between method and request-target
     if (line_copy[4] == ' ')
     {
+        printf("5\n");
         error(400);
         return false;
     }
@@ -789,6 +834,7 @@ bool parse(const char* line, char* abs_path, char* query)
     // don't need to check for spaces because logic flow guarantees no spaces
     if (strchr(request_target, '"') != NULL) // backslash not required for single quotes
     {
+        printf("6\n");
         error(400);
         return false;
     }
@@ -800,6 +846,7 @@ bool parse(const char* line, char* abs_path, char* query)
     int len_http_version = strlen(http_version);
     if (line_copy[len_line - len_http_version] == ' ')
     {
+        printf("7\n");
         error(400);
         return false;
     }
@@ -825,9 +872,10 @@ bool parse(const char* line, char* abs_path, char* query)
         // return false;
     
     // ensure request-line ends with CRLF (i.e. ""\r\n")
-    const char* crlf = "\\r\\n"; // has null terminator
-    if (strstr(http_version, crlf) != crlf)
+    const char* crlf = "\r\n"; // has null terminator
+    if (strstr(http_version, crlf) == NULL)
     {
+        printf("8\n");
         error(400);
         return false;
     }
@@ -837,12 +885,12 @@ bool parse(const char* line, char* abs_path, char* query)
     char request_target_copy[len_request_target + 1]; // include space for null terminator
     strcpy(request_target_copy, request_target);
     
-    
     // store absolute-path and [ "?" query ]
     // if request target doesn't have a ?
     if (strchr(request_target, '?') == NULL)
     {
-        abs_path = request_target_copy;
+        strcpy(abs_path, request_target_copy);
+        //abs_path = request_target_copy;
         query = "";
     }
     // if request target has a ? 
@@ -855,6 +903,9 @@ bool parse(const char* line, char* abs_path, char* query)
             query = "";
         }
     }
+    
+    printf("abs_path: %s\n", abs_path);
+    printf("query: %s\n", query);
     
     return true;
 }
