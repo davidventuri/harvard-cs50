@@ -668,20 +668,20 @@ bool load(FILE* file, BYTE** content, size_t* length)
     *length = 0;
     
     // initialize buffer
-    BYTE buffer[BYTES];
+    BYTE buffer[1];
 
-    // read from file and attempt to store 512 bytes in buffer
-    while (fread(buffer, BYTES, 1, file) != 0)
+    // read from file and attempt to store 1 byte in buffer
+    while (fread(buffer, 1, 1, file) != 0)
     {
         // append bytes to content 
-        *content = realloc(*content, *length * BYTES + BYTES + 1);
+        *content = realloc(*content, *length + 1 + 1);
         if (*content == NULL)
         {
             printf("Memory allocation error.\n");
             *length = 0;
             return false;
         }
-        memcpy(*content + *length * BYTES, buffer, BYTES);
+        memcpy(*content + *length, buffer, 1);
         *length += 1;
 
         // null-terminate message thus far
