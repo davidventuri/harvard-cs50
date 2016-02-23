@@ -440,27 +440,18 @@ char* htmlspecialchars(const char* s)
 
 /**
  * Checks, in order, whether index.php or index.html exists inside of path.
- * Returns path to first match if so, else NULL.
+ * Returns path (dynamically allocated on heap) to first match if so, else NULL.
  */
 char* indexes(const char* path)
 {
-    // Complete the implementation of indexes in such a way that the function, 
-    // given a /path/to/a/directory, returns /path/to/a/directory/index.php if 
-    // index.php actually exists therein, or /path/to/a/directory/index.html if
-    // index.html actually exists therein, or NULL. In the first of those cases,
-    // this function should dynamically allocate memory on the heap for the 
-    // returned string.
-    
     int len_path = strlen(path);
-    int len_index_php = 9 + 1; // include null terminator
-    char* index_php_path = malloc(len_path + len_index_php);
-    
+    int len_index_php_filename = 9 + 1; // include null terminator
+    char* index_php_path = malloc(len_path + len_index_php_filename);
     if (index_php_path == NULL)
     {
         printf("Memory allocation error.\n");
         return NULL;
     }
-    
     strcpy(index_php_path, path);
     strcat(index_php_path, "index.php");
     
@@ -474,15 +465,13 @@ char* indexes(const char* path)
         free(index_php_path);
     }
     
-    int len_index_html = 10 + 1; // include null terminator
-    char* index_html_path = malloc(len_path + len_index_html);
-    
+    int len_index_html_filename = 10 + 1; // include null terminator
+    char* index_html_path = malloc(len_path + len_index_html_filename);
     if (index_html_path == NULL)
     {
         printf("Memory allocation error.\n");
         return NULL;
     }
-    
     strcpy(index_html_path, path);
     strcat(index_html_path, "index.html");
     
@@ -498,6 +487,7 @@ char* indexes(const char* path)
     
     return NULL;
 }
+
 
 /**
  * Interprets PHP file at path using query string.
@@ -660,29 +650,28 @@ void list(const char* path)
  */
 bool load(FILE* file, BYTE** content, size_t* length)
 {
-    // store address in *content (dereference the pointer to a pointer)
-    // iterate through file until we reach end of file, adding to byte_count
-    
     // initialize content and its length
     *content = NULL;
     *length = 0;
+    size_t buffer_size = 1;
+    size_t num_elements = 1;
     
     // initialize buffer
-    BYTE buffer[1];
+    BYTE buffer[buffer_size];
 
-    // read from file and attempt to store 1 byte in buffer
-    while (fread(buffer, 1, 1, file) != 0)
+    // read from file 1 byte at a time into buffer
+    while (fread(buffer, buffer_size, num_elements, file) != 0)
     {
-        // append bytes to content 
-        *content = realloc(*content, *length + 1 + 1);
+        // append bytes to content, including + 1 for null terminator
+        *content = realloc(*content, *length + buffer_size + 1);
         if (*content == NULL)
         {
             printf("Memory allocation error.\n");
             *length = 0;
             return false;
         }
-        memcpy(*content + *length, buffer, 1);
-        *length += 1;
+        memcpy(*content + *length, buffer, buffer_size);
+        *length += buffer_size;
 
         // null-terminate message thus far
         *(*content + *length) = '\0';
@@ -711,15 +700,8 @@ bool load(FILE* file, BYTE** content, size_t* length)
  */
 const char* lookup(const char* path)
 {
-    // path points to series of chars, then null terminator
-    // do not copy null terminator
-    // int len = strlen(path);
-    // char path_copy[len];
-    // strncpy(path_copy, path, len);
-    
     // isolate file extension and store it in ext
     // DV note: strrchr includes null terminator
-    
     char* extension;
     extension = strrchr(path, '.');
     
@@ -727,28 +709,28 @@ const char* lookup(const char* path)
     {
         // return MIME type based on case-insentive string comparison
         // DV note: string literals implicitly contain null terminator
-        if (strcasecmp(extension, ".css") == 0)
+        if (strncasecmp(extension, ".css", 4) == 0)
             return "text/css";
         
-        if (strcasecmp(extension, ".html") == 0)
+        if (strncasecmp(extension, ".html", 5) == 0)
             return "text/html";
             
-        if (strcasecmp(extension, ".gif") == 0)
+        if (strncasecmp(extension, ".gif", 4) == 0)
             return "image/gif";
             
-        if (strcasecmp(extension, ".ico") == 0)
+        if (strncasecmp(extension, ".ico", 4) == 0)
             return "image/x-icon";
         
-        if (strcasecmp(extension, ".jpg") == 0)
+        if (strncasecmp(extension, ".jpg", 4) == 0)
             return "image/jpeg";
         
-        if (strcasecmp(extension, ".js") == 0)
+        if (strncasecmp(extension, ".js", 3) == 0)
             return "text/javascript";
             
-        if (strcasecmp(extension, ".php") == 0)
+        if (strncasecmp(extension, ".php", 4) == 0)
             return "text/x-php";
             
-        if (strcasecmp(extension, ".png") == 0)
+        if (strncasecmp(extension, ".png", 4) == 0)
             return "image/png";
     }
     return NULL;
@@ -770,7 +752,6 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 1 string, 0 spaces must exist
     if (method == NULL)
     {
-        printf("1\n");
         error(400);
         return false;
     }
@@ -779,7 +760,6 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 2 strings, < 1 space must exist
     if (request_target == NULL)
     {
-        printf("2\n");
         error(400);
         return false;
     }
@@ -788,7 +768,6 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates < 3 strings, < 2 spaces must exist
     if (http_version == NULL)
     {
-        printf("3\n");
         error(400);
         return false;
     }
@@ -797,62 +776,54 @@ bool parse(const char* line, char* abs_path, char* query)
     // if strtok generates > 3 strings, > 2 spaces must exist
     if (fourth_string != NULL)
     {
-        printf("4\n");
         error(400);
         return false;
     }
     
-    // if we get to here, we are guaranteed to have 2 spaces
-    // by checking that GET exists properly, we guarantee there are no spaces in it
-    // by checking that http version exists properly, we guarantee there are no spaces in it
-    // this indirectly guarantees word in between the two spaces (request-target) has no spaces
-    
     // ensure method is GET
+    // by checking that GET exists properly, we guarantee it contains no spaces
     const char correct_method[4] = "GET"; // has null terminator
-    if (strcmp(method, correct_method) != 0) // don't need to check single spaces anymore
+    if (strcmp(method, correct_method) != 0)
     {
         error(405);
         return false;
     }
       
-    // ensure single space exists between method and request-target
+    // ensure single space exists between method and request target
     if (line_copy[4] == ' ')
     {
-        printf("5\n");
         error(400);
         return false;
     }
         
-    // ensure "/" is the first character in request-target
+    // ensure "/" is the first character in request target
     if (line_copy[4] != '/')
     {
         error(501);
         return false;
     }
         
-    // ensure request-target does not contain "
-    // don't need to check for spaces because logic flow guarantees no spaces
-    if (strchr(request_target, '"') != NULL) // backslash not required for single quotes
+    // ensure request target does not contain "
+    if (strchr(request_target, '"') != NULL) // /" not required for single quotes
     {
-        printf("6\n");
         error(400);
         return false;
     }
     
-    // ensure single space exists between request-target and HTTP-version
-    // GET /home/hello.html HTTP/1.1\r\n0
-    // 34 - 13 = 21st element, therefore index 20 is the first space
+    // ensure single space exists between request target and HTTP version
+    // example line: GET /home/hello.html HTTP/1.1\r\n0
+    // 34 - 13 = 21st element (index 20) is second space
     // therefore index 21 is the char following the space
     int len_http_version = strlen(http_version);
     if (line_copy[len_line - len_http_version] == ' ')
     {
-        printf("7\n");
         error(400);
         return false;
     }
     
-    // ensure HTTP version is 1.1
-    // remember http_version should contain \r\n
+    // ensure HTTP version is 1.1 (note: http version string should contain \r\n)
+    // by checking that http version exists properly, we guarantee it contains
+    // no spaces, which indirectly guarantees request target had no spaces
     const char correct_http_version[9] = "HTTP/1.1"; // has null terminator
     if (strncmp(http_version, correct_http_version, 8) != 0)
     {
@@ -860,22 +831,10 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
     
-    // ensure no spaces in request-target
-    //if (http_version[0] != 'H')
-    //{
-    //    error(400);
-    //    return false;
-    //}
-        
-    // ensure HTTP version does not contain spaces
-        // error(400);
-        // return false;
-    
-    // ensure request-line ends with CRLF (i.e. ""\r\n")
+    // ensure request-line ends with CRLF (i.e. "\r\n")
     const char* crlf = "\r\n"; // has null terminator
     if (strstr(http_version, crlf) == NULL)
     {
-        printf("8\n");
         error(400);
         return false;
     }
@@ -889,24 +848,26 @@ bool parse(const char* line, char* abs_path, char* query)
     // if request target doesn't have a ?
     if (strchr(request_target, '?') == NULL)
     {
+        // DV note: initial bug -> abs_path = request_target_copy;
         strcpy(abs_path, request_target_copy);
-        //abs_path = request_target_copy;
         query = "";
     }
     // if request target has a ? 
     else
     {
-        abs_path = strtok(request_target_copy, "?");
-        query = strtok(NULL, "?");
-        if (query == NULL)
+        const char* abs_path_copy = strtok(request_target_copy, "?");
+        const char* query_copy = strtok(NULL, "?");
+        if (query_copy == NULL)
         {
-            query = "";
+            query_copy = "";
         }
+        strcpy(abs_path, abs_path_copy);
+        strcpy(query, query_copy);
     }
-    
-    printf("abs_path: %s\n", abs_path);
-    printf("query: %s\n", query);
-    
+
+    // DV note: for debug
+    // printf("abs_path: %s\n", abs_path);
+    // printf("query: %s\n", query);
     return true;
 }
 
