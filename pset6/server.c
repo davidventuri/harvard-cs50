@@ -1,6 +1,9 @@
 //
 // server.c
 //
+// Write a web server in C whose purpose is to receive HTTP requests and respond
+// with static or dynamic content depending on the file requested.
+//
 // Computer Science 50
 // Problem Set 6
 //
@@ -790,14 +793,14 @@ bool parse(const char* line, char* abs_path, char* query)
     }
       
     // ensure single space exists between method and request target
-    if (line_copy[4] == ' ')
+    if (line[4] == ' ')
     {
         error(400);
         return false;
     }
         
     // ensure "/" is the first character in request target
-    if (line_copy[4] != '/')
+    if (line[4] != '/')
     {
         error(501);
         return false;
@@ -811,11 +814,11 @@ bool parse(const char* line, char* abs_path, char* query)
     }
     
     // ensure single space exists between request target and HTTP version
-    // example line: GET /home/hello.html HTTP/1.1\r\n0
-    // 34 - 13 = 21st element (index 20) is second space
+    // example line: GET /home/hello.html HTTP/1.1\r\n
+    // 33 - 12 = 21st element (index 20) is second space
     // therefore index 21 is the char following the space
     int len_http_version = strlen(http_version);
-    if (line_copy[len_line - len_http_version] == ' ')
+    if (line[len_line - len_http_version] == ' ')
     {
         error(400);
         return false;
@@ -864,10 +867,7 @@ bool parse(const char* line, char* abs_path, char* query)
         strcpy(abs_path, abs_path_copy);
         strcpy(query, query_copy);
     }
-
-    // DV note: for debug
-    // printf("abs_path: %s\n", abs_path);
-    // printf("query: %s\n", query);
+    
     return true;
 }
 
