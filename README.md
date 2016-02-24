@@ -1,7 +1,7 @@
 # harvard-cs50
 Problem sets and projects for Harvard CS50: Introduction to Computer Science
 
-To complete the following psets, I studied all of the CS50 lectures, walkthroughs, sections, and shorts on edX. All of my programs received 100% from the CS50 grader.
+To complete the following psets, I studied all of the CS50 lectures, walkthroughs, sections, and shorts on edX. All pset submissions received scores of 100% from the CS50x gradebook.
 
 ### psets:
 - [Problem Set 1: C](https://cdn.cs50.net/2015/x/psets/1/pset1/pset1.html)
