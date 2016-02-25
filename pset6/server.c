@@ -792,15 +792,21 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
       
+    int len_method = strlen(method);
+    int space = 1;
+    int next_char = 1;
+    
     // ensure single space exists between method and request target
-    if (line[4] == ' ')
+    // - 1 because arrays are zero-indexed
+    if (line[len_method + space + next_char - 1] == ' ')
     {
         error(400);
         return false;
     }
         
     // ensure "/" is the first character in request target
-    if (line[4] != '/')
+    // - 1 because arrays are zero-indexed
+    if (line[len_method + space + next_char - 1] != '/')
     {
         error(501);
         return false;
@@ -814,11 +820,9 @@ bool parse(const char* line, char* abs_path, char* query)
     }
     
     // ensure single space exists between request target and HTTP version
-    // example line: GET /home/hello.html HTTP/1.1\r\n
-    // 33 - 12 = 21st element (index 20) is second space
-    // therefore index 21 is the char following the space
-    int len_http_version = strlen(http_version);
-    if (line[len_line - len_http_version] == ' ')
+    // - 1 because arrays are zero-indexed
+    int len_request_target = strlen(request_target);
+    if (line[len_method + space + len_request_target + space + next_char - 1] == ' ')
     {
         error(400);
         return false;
@@ -843,7 +847,6 @@ bool parse(const char* line, char* abs_path, char* query)
     }
     
     // copy request_target into request_target_copy to remove const
-    int len_request_target = strlen(request_target);
     char request_target_copy[len_request_target + 1]; // include space for null terminator
     strcpy(request_target_copy, request_target);
     
