@@ -12,6 +12,20 @@
     require_once("config.php");
 
     /**
+     * Format a number to at least two decimal places but no more than four.
+     */
+    function desired_decimal_format($number)
+    {
+        $number = number_format($number, 4);
+            for($i=0; $i<4-2; $i++)
+            {
+                if (substr($number, -1) == '0')
+                $number = substr($number, 0, -1);
+            }
+        return $number;
+    }
+    
+    /**
      * Apologizes to user with message.
      */
     function apologize($message)
