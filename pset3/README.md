@@ -9,4 +9,6 @@
 ### Projects
 - Implement generate.c, a program that generates pseudorandom numbers in [0, 65536), one per line.
 - In helpers.c, implement a linear search function, a binary search function, and a selection sort function.
-- Implement fifteen.c, a program with which one can play a [15 puzzle](https://en.wikipedia.org/wiki/15_puzzle)-type of game, whereby the board's dimensions can range from 3x3 to 9x9.
+- Implement fifteen.c, a program with which one can play a [15 puzzle](https://en.wikipedia.org/wiki/15_puzzle)-type of game in the terminal window, whereby the board's dimensions can range from 3x3 to 9x9.
+
+![Solved game of fifteen](https://upload.wikimedia.org/wikipedia/commons/9/91/15-puzzle.svg)
