@@ -11,7 +11,7 @@ prices of real stocks using Yahoo! Finance data, as well as buy and sell stocks 
 to create a mock portfolio! Per Yahoo’s fine print, "Quotes delayed [by a few minutes], except 
 where indicated otherwise."
 
-### TODO
+### *TODO*
 - Create a **database using MySQL and phpMyAdmin** to store usernames, hashed passwords, "cash" balances, stock purchases/sales info (e.g. stock symbol, name, # of shares, price).
 - Implement the **controllers* (the .php files in the /public folder).
 - Implement the **views** (the .php files in the /views folder).
