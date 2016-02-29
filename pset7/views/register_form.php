@@ -7,7 +7,7 @@
             <input class="form-control" name="password" placeholder="Password" type="password"/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="confirmation" placeholder="Password confirmation" type="password"/>
+            <input class="form-control" name="confirmation" placeholder="Password (again)" type="password"/>
         </div>
         <div class="form-group">
             <button class="btn btn-default" type="submit">
