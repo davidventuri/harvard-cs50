@@ -15,6 +15,11 @@
     text-align: center;
 }
 
+td
+{
+    text-align: left;
+}
+
 #top
 {
     /* surround with whitespace */
