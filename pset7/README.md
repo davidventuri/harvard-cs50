@@ -12,6 +12,6 @@ to create a mock portfolio! Per Yahoo’s fine print, "Quotes delayed [by a few 
 where indicated otherwise."
 
 ### *// TODO*
-- Create a **database using MySQL and phpMyAdmin** to store usernames, hashed passwords, "cash" balances, stock purchases/sales info (e.g. stock symbol, name, # of shares, price).
-- Implement the **controllers* (the .php files in the /public folder).
+- Create a **database using MySQL and phpMyAdmin** to store usernames, hashed passwords, "cash" balances, stock purchases/sales info (e.g. transaction type, stock symbol, stock name, # of shares, price).
+- Implement the **controllers** (the .php files in the /public folder).
 - Implement the **views** (the .php files in the /views folder).
