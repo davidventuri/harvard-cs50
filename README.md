@@ -10,6 +10,8 @@ To complete the following psets, I studied all of the CS50 lectures, walkthrough
 - [Problem Set 4: Forensics](http://cdn.cs50.net/2016/x/psets/4/pset4/pset4.html)
 - [Problem Set 5: Mispellings](http://cdn.cs50.net/2016/x/psets/5/pset5/pset5.html)
 - [Problem Set 6: Web Server](http://cdn.cs50.net/2016/x/psets/6/pset6/pset6.html)
+- [Problem Set 7: C$50 Finance](http://cdn.cs50.net/2016/x/psets/7/pset7/pset7.html)
+- [Problem Set 8: Mashup](http://cdn.cs50.net/2016/x/psets/8/pset8/pset8.html)
 
 
 ### [syllabus:](http://cdn.cs50.net/2016/x/references/syllabus/syllabus.html)
