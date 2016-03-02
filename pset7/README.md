@@ -15,5 +15,5 @@ where indicated otherwise."
 
 ### *// TODO*
 - Create a **database using MySQL and phpMyAdmin** to store usernames, hashed passwords, "cash" balances, stock purchases/sales info (e.g. transaction type, stock symbol, stock name, # of shares, price).
-- Implement the **controllers** (the .php files in the /public folder).
-- Implement the **views** (the .php files in the /views folder).
+- Implement the **controllers** (all of the .php files in the /public folder).
+- Implement the **views** (all of the .php files in the /views folder).
