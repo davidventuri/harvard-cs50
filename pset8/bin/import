@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+    
+    require(__DIR__ . "/../includes/config.php");
+    
+    // ensure proper usage
+    if ($argc != 2)
+    {
+        print("Usage: ./import filepath\n");
+        $x = __DIR__ . "/../includes/config.php\n";
+        echo $x;
+    }
+    // ensure file exists
+    else if (!file_exists($argv[1]))
+    {
+        print("File does not exist.\n");
+    }
+    // ensure file is readable
+    else if(!is_readable($argv[1]))
+    {
+        print("File is not readable.\n");
+    }
+    else
+    {
+        // open file
+        $file = fopen($argv[1], "r");
+        
+        // insert row containing geodata into places until EOF is reached
+        while($geodata = fgetcsv($file, 0, "\t"))
+        {
+            CS50::query("INSERT INTO places (country_code, postal_code, place_name, admin_name1, admin_code1, admin_name2, admin_code2, admin_name3, admin_code3, latitude, longitude, accuracy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", $geodata[0], $geodata[1], $geodata[2], $geodata[3], $geodata[4], $geodata[5], $geodata[6], $geodata[7], $geodata[8], $geodata[9], $geodata[10], $geodata[11]);
+        }
+        
+        // close file
+        fclose($file);
+    }
+
+?>
