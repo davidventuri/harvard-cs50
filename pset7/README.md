@@ -1,5 +1,7 @@
 # [Problem Set 7: C$50 Finance](http://cdn.cs50.net/2016/x/psets/7/pset7/pset7.html)
 
+Note: vendor folder, which contains CS50’s PHP library, is not included in this repo folder.
+
 ### Objectives
 - Introduce you to HTML, CSS, PHP, and SQL.
 - Teach you how to teach yourself new languages.
