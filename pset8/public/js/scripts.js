@@ -209,9 +209,9 @@ function htmlInfoWindow(data)
     for (var i = 0; i < len_data; i++)
     {
         ul += template({
-                           link: data[i].link,
-            			   title: data[i].title
-            		    }); 
+            link: data[i].link,
+            title: data[i].title
+        }); 
     }
 
     // end unordered list
@@ -227,38 +227,38 @@ function loadInfoWindow(place, marker)
 {
     showInfo(marker);
 
-	$.getJSON("articles.php", "geo=" + place.postal_code)
+    $.getJSON("articles.php", "geo=" + place.postal_code)
     .done(function(data, textStatus, jqXHR) 
     {
         // if no news in postal code area, call getJSON on place name instead
-	    if (data.length === 0)
-	    {
-	        $.getJSON("articles.php", "geo=" + place.place_name)
+	if (data.length === 0)
+	{
+	    $.getJSON("articles.php", "geo=" + place.place_name)
             .done(function(data, textStatus, jqXHR) 
             {
                 // if no news in place name area, fill info window with placeholder text
                 if (data.length === 0)
-        	    {
-        	        showInfo(marker, "No news for this area.");
-        	    }
-        	    // else if news exists in place name area, display news in info window
-        	    else
-        	    {
-        		    // dynamically create list of articles in html
-        		    ul = htmlInfoWindow(data);
-        		    
-        		    // show news
-        		    showInfo(marker, ul);
-        	    }
-        	});
-	    }
-	    // else if news exists in postal code area, displays news in info window
-	    else
-	    {
+        	{
+        	    showInfo(marker, "No news for this area.");
+        	}
+        	// else if news exists in place name area, display news in info window
+        	else
+                {
+                    // dynamically create list of articles in html
+        	    ul = htmlInfoWindow(data);
+        	    
+        	    // show news
+                    showInfo(marker, ul);
+        	}
+            });
+	}
+	// else if news exists in postal code area, displays news in info window
+	else
+	{
             // dynamically create list of articles in html
     	    ul = htmlInfoWindow(data);
 
-		    // show news
+            // show news
     	    showInfo(marker, ul);
         }
     });
