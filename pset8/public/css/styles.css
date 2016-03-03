@@ -1,0 +1,98 @@
+/**
+ * styles.css
+ *
+ * Computer Science 50
+ * Problem Set 8
+ *
+ * Global CSS.
+ */
+
+/* allow map to fill viewport */
+html, body, #map-canvas, .container-fluid
+{
+    /* height of these elements */
+    height: 100%;
+
+    /* no margin around these elements */
+    margin: 0;
+
+    /* disable scrollbars */
+    overflow: hidden;
+
+    /* no padding within these elements */
+    padding: 0;
+}
+
+/* align form to right of pan control */
+#form
+{
+    /* distance from left edge of viewport */
+    left: 100px;
+
+    /* position form "absolutely" where we want it */
+    position: absolute;
+
+    /* distance from top edge of viewport */
+    top: 28px;
+}
+
+/* stylize text box */
+#q
+{
+    /* override typeahead.js's transparent background */
+    background-color: #ffffff !important;
+
+    /* text box's width */
+    width: 300px;
+}
+
+/* stylize places' labels */
+.label
+{
+    /* small, black text */
+    color: #000000;
+    font-family: sans-serif;
+    font-size: small;
+    font-weight: bold;
+
+    /* don't let places' labels wrap onto multiple lines */
+    white-space: nowrap;
+}
+
+/* stylize info window */
+#info
+{
+    /* no margin around this element */
+    margin: 0;
+
+    /* should be at least this width */
+    min-width: 200px;
+
+    /* allow scrollbars as needed */
+    overflow: auto;
+}
+#info ul
+{
+    margin-bottom: 0;
+}
+
+/* stylize typeahead.js a la http://twitter.github.io/typeahead.js/css/examples.css */
+.tt-dropdown-menu
+{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 1px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 6px 12px;
+    width: 300px;
+}
+.tt-suggestion.tt-cursor {
+    background-color: #0097cf;
+    color: #fff;
+    cursor: pointer;
+}
+.tt-suggestion p {
+    margin: 0;
+}
