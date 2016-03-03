@@ -1,0 +1,8 @@
+{
+    "database": {
+        "host": "localhost",
+        "name": "pset8",
+        "username": "username",
+        "password": "password"
+    }
+}
