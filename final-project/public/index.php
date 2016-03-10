@@ -5,7 +5,7 @@
     
     // pick a random image's id from the database
     $min = 1;
-    $max = 81;
+    $max = 82;
     $random_id = mt_rand($min, $max);
     
     // query database for random image
