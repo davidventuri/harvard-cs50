@@ -1,5 +1,15 @@
 # [Final Project](http://cdn.cs50.net/2016/x/project/project.html)
 
-***Note:*** *vendor, the folder that contains CS50’s PHP library, is not included in this repo folder.*
+### A game where you answer the age-old question: "Is this a Rick or a stick?"
 
-The climax of this course is its final project. The final project is your opportunity to take your newfound savvy with programming out for a spin and develop your very own piece of software. So long as your project draws upon this course’s lessons, the nature of your project is entirely up to you. You may implement your project in any language(s). You are welcome to utilize infrastructure other than the CS50 Appliance. All that we ask is that you build something of interest to you, that you solve an actual problem, that you impact your community, or that you change the world. Strive to create something that outlives this course.
+The *hottest*, *most addicting* new game of 2016, "[Rick or Stick?](http://rickorstick.xyz/)", is here! Is this a picture of someone named Rick? Or is it a picture of a stick? Answer correctly and you get a point. Never again will you confuse your friend Rick for a stick. Trust us, all of your friends named Rick thank you. Start climbing the [rickorstick.xyz](http://rickorstick.xyz/) leaderboard today!
+
+Project video for CS50 Expo: [Youtube link](https://www.youtube.com/watch?v=_AedKbdMtcU)
+
+### Project specification:
+
+![CS50 Final Project Spec](http://i.imgur.com/r0mb4jP.png)
+
+### Mission accomplished
+![Rick or Stick? 1](http://i.imgur.com/A4F4J69.png)
+![Rick or Stick? 2](http://i.imgur.com/63tc24W.png)
