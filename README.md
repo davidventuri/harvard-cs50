@@ -15,7 +15,7 @@ To complete the following psets, I studied all of the CS50 lectures, walkthrough
 
 ### [final project](http://cdn.cs50.net/2016/x/project/project.html)
 - www.rickorstick.xyz
-- [Video](https://www.youtube.com/watch?v=_AedKbdMtcU)
+- [Promo video](https://www.youtube.com/watch?v=_AedKbdMtcU)
 
 ### [syllabus:](http://cdn.cs50.net/2016/x/references/syllabus/syllabus.html)
 #####Week 0
